@@ -6,15 +6,23 @@ const filter = document.getElementById("filter");
 const todoInput = document.getElementById("todo");
 
 loadEventListeners();
+removeTodo();
 
 // Load all event listeners
 function loadEventListeners() {
   // Add todo event
   form.addEventListener("submit", addTodo);
+  // Remove todo
+  todoList.addEventListener("click", removeTodo);
+  // Clear all todos
+  clearBtn.addEventListener("click", clearAllTodos);
+  // Filter Todos
+  filter.addEventListener("keyup", filterTodos);
 }
 
 // Add todo function
 function addTodo(e) {
+  console.log(e);
   // Check for input value
   if (todoInput.value === "") {
     alert("Add todo");
@@ -44,4 +52,32 @@ function addTodo(e) {
   // Prevent form submit
 
   e.preventDefault();
+}
+
+function removeTodo(e) {
+  if (e.target.parentElement.classList.contains("delete-item")) {
+    if (confirm("Are you sure?")) {
+      e.target.parentElement.parentElement.remove();
+    }
+  }
+}
+
+function clearAllTodos(e) {
+  if (confirm("Are you sure")) {
+    todoList.innerHTML = "";
+  }
+}
+
+// Filter Todos
+function filterTodos(e) {
+  const text = e.target.value.toLowerCase();
+
+  document.querySelectorAll(".collection-item").forEach(function (todo) {
+    const item = todo.firstChild.textContent;
+    if (item.toLowerCase().indexOf(text) != -1) {
+      todo.style.display = "block";
+    } else {
+      todo.style.display = "none";
+    }
+  });
 }
